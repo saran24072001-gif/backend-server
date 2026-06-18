@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { getL3Approvals, createL3Approval } from '../controllers/l3Controller.js';
+import { verifyToken } from '../middlewares/authMiddleware.js';
+
+const router = Router();
+
+router.get('/changes/l3', verifyToken, getL3Approvals);
+router.post('/changes/l3', verifyToken, createL3Approval);
+
+export default router;
