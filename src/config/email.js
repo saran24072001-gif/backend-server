@@ -13,14 +13,22 @@ const useSMTP = process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SM
 
 if (useSMTP) {
   transporter = nodemailer.createTransport({
-    pool: true,
-    host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT || '587', 10),
-    secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+    service: 'gmail',
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
     },
+    connectionTimeout: 30000,
+    greetingTimeout: 30000,
+    socketTimeout: 30000,
+  });
+
+  transporter.verify((error, success) => {
+    if (error) {
+      console.error('SMTP Verify Error:', error);
+    } else {
+      console.log('SMTP Server Ready');
+    }
   });
 } else {
   console.log('SMTP configuration not fully set in .env. Email notifications will be logged to console.');
